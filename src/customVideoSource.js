@@ -11,7 +11,7 @@
  *  @param  {string} codec - The {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/clientconfig.html#codec| client codec} used by the browser.
  */
 // import { createAvatar } from './index'
-// import { createAvatar } from './index.ts';
+import { createAvatar } from './index.ts';
 
 var client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
@@ -148,9 +148,9 @@ async function join() {
     $("#local-player-name").text(`localVideo(${options.uid})`);
     console.log("publish success");
   }
-  else if (currentStream == "altar") {
+  else if (currentStream.includes("altar")) {
     console.log("chaned to altar")
-    // await createAvatar()
+    await createAvatar(currentStream.split('-')[1])
     var stream = document.getElementById("canvas").captureStream(30);
     [options.uid, localTracks.videoTrack] = await Promise.all([
       // Join the channel.

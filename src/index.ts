@@ -30,7 +30,7 @@ Logger.logLevel = LogLevel.Debug
 const videoElement = document.getElementById('videoSource') as HTMLVideoElement
 const messageElement = document.getElementById('message') as HTMLElement
 
-export const createAvatar = async () => {
+export const createAvatar = async (customPresetIndex = null) => {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
 
     let avatarPresets: Array<AvatarMatrix> = []
@@ -54,6 +54,9 @@ export const createAvatar = async () => {
         fps.tick((n) => {
             const fpsMessage = `FPS: ${Math.ceil(n)}`
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
+            // const lastResult = cameraTracker.lastResult;
+            // const blend_shapes = lastResult._blendshapes_9;
+
             messageElement.innerHTML = fpsMessage + noFaceMessage
         })
         // canvas.width = 480;
@@ -68,7 +71,7 @@ export const createAvatar = async () => {
     // Create first avatar. Note that loading avatars can take some time (network requests etc.) so we get an asynchronous Future object
     // that resolves when the avatar is ready to display.
     const avatarFuture = avatarFactory.createAvatarFromFile('avatar.json' /*, avatarFactory?.bundledFileSystem*/) // uncomment to load the Avatar matrix from app assets
-    avatarFuture?.then(
+    await avatarFuture?.then(
         (createdAvatar) => {
             avatar = createdAvatar ?? undefined
             avatar?.setBackgroundColor(Col.TRANSPARENT)
@@ -83,20 +86,38 @@ export const createAvatar = async () => {
     )
 
     // Load more avatars from ready-made presets and start swapping them around
-    avatarFactory
+    await avatarFactory
         .parseAvatarMatricesFromFile('presets.json' /*, avatarFactory?.bundledFileSystem*/) // uncomment to load the avatar presets from app assets
         .then(
             (presets) => {
                 avatarPresets = presets.toArray()
                 if (avatarPresets.length > 0) {
-                    presetsSwapExecutor = new PeriodicExecutor(20, () => {
-                        const currentPresetIndex = presetIndex
-                        console.info(`Updating to avatar preset ${currentPresetIndex}`)
+                    if (customPresetIndex) {
+                        // presetsSwapExecutor = new PeriodicExecutor(5, () => {
+                        //     console.info(`Updating to avatar preset ${customPresetIndex}`)
+                        //     debugger;
+                        //     avatar
+                        //         ?.updateAvatarFromMatrix(avatarPresets[customPresetIndex])
+                        //         .then(() => console.log(`Updated to avatar preset ${customPresetIndex}`))
+                        // })
+                        // setTimeout(() => {
                         avatar
-                            ?.updateAvatarFromMatrix(avatarPresets[currentPresetIndex])
-                            .then(() => console.log(`Updated to avatar preset ${currentPresetIndex}`))
-                        presetIndex = (currentPresetIndex + 1) % avatarPresets.length
-                    })
+                            ?.updateAvatarFromMatrix(avatarPresets[customPresetIndex])
+                            .then(() => console.log(`Updated to avatar preset ${customPresetIndex}`))
+                        // }, 1000)
+
+                    } else {
+                        presetsSwapExecutor = new PeriodicExecutor(20, () => {
+                            const currentPresetIndex = presetIndex
+                            console.info(`Updating to avatar preset ${currentPresetIndex}`)
+                            debugger;
+                            avatar
+                                ?.updateAvatarFromMatrix(avatarPresets[currentPresetIndex])
+                                .then(() => console.log(`Updated to avatar preset ${currentPresetIndex}`))
+                            presetIndex = (currentPresetIndex + 1) % avatarPresets.length
+                        })
+                    }
+
                 }
             },
             (error) => console.error(`Failed to load and parse avatar presets, ${error}`)
@@ -168,6 +189,7 @@ class CameraTracker {
         // Serialize/deserialize tracking result for e.g. sending over WebRTC, use TrackerResultAvatarController for that
         // const serialized = this.lastResult?.serialize()
         // const deserialized = serialized ? deserializeResult(serialized).first : undefined
+        // console.log("deserialized values", deserialized)
     }
 
     public get avatarController() {
@@ -179,4 +201,4 @@ class CameraTracker {
     }
 }
 
-createAvatar()
+// createAvatar()

@@ -117,8 +117,13 @@
                         <option value="mp4" selected="selected">Sample.mp4</option>
                         <option value="funk">funky</option>
                         <option value="funk3">photo</option>
-                        <option value="altar">Altar</option>
-
+                        <option value="altar-0">Altar preset 1</option>
+                        <option value="altar-1">Altar preset 2</option>
+                        <option value="altar-2">Altar preset 3</option>
+                        <option value="altar-3">Altar preset 4</option>
+                        <option value="altar-4">Altar preset 5</option>
+                        <option value="altar-5">Altar preset 6</option>
+                      
                     </select>
                 </div>
             </div>
@@ -179,7 +184,7 @@
             <div id="canvas-wrapper" style="position: relative;">
                 <canvas id="canvas" width="480" height="360" style="background-color:transparent; display:none;" ></canvas>
                 <div  style="background-color:transparent; display:none;" id="message">loading...</div>
-                <svg id="spinner" class="spinner" viewBox="0 0 50 50">
+                <svg id="spinner" class="spinner" viewBox="0 0 50 50" style="background-color:transparent; display:none;">
                     <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
                 </svg>
             </div>
@@ -197,7 +202,7 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
-    <script src="./customVideoSource.js"></script>
+    <!-- <script src="./customVideoSource.js"></script> -->
     <script>
         /*
             var canvas = document.getElementById('canid2');
