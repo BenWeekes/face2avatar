@@ -51,6 +51,7 @@ $(() => {
   options.token = urlParams.get("token");
   options.uid = urlParams.get("uid");
   currentStream = urlParams.get("stream-source");
+
   if (options.appid && options.channel) {
     $("#uid").val(options.uid);
     $("#appid").val(options.appid);
@@ -118,6 +119,8 @@ async function join() {
   // Default publish local microphone audio track to both options.
   localTracks.audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 
+  $("#blend-shapes-values").css("display", "none");
+
   if (currentStream == "camera") {
     // Join a channel and create local tracks. Best practice is to use Promise.all and run them concurrently.
     [options.uid, localTracks.videoTrack] = await Promise.all([
@@ -149,8 +152,12 @@ async function join() {
     console.log("publish success");
   }
   else if (currentStream.includes("altar")) {
-    console.log("chaned to altar")
+    console.log("chaned to altar");
+    $("#blend-shapes-values").css("display", "block");
+
+
     await createAvatar(currentStream.split('-')[1])
+
     var stream = document.getElementById("canvas").captureStream(30);
     [options.uid, localTracks.videoTrack] = await Promise.all([
       // Join the channel.

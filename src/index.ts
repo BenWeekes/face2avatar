@@ -32,6 +32,8 @@ const messageElement = document.getElementById('message') as HTMLElement
 
 export const createAvatar = async (customPresetIndex = null) => {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
+    const blendShapesContainnr = document.getElementById('blend-shapes-values') as any;
+
 
     let avatarPresets: Array<AvatarMatrix> = []
     let avatar: Avatar | undefined
@@ -54,8 +56,22 @@ export const createAvatar = async (customPresetIndex = null) => {
         fps.tick((n) => {
             const fpsMessage = `FPS: ${Math.ceil(n)}`
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
-            // const lastResult = cameraTracker.lastResult;
-            // const blend_shapes = lastResult._blendshapes_9;
+
+            const lastResult = cameraTracker?.lastResult;
+            const blend_shapes = lastResult?._blendshapes_9?._innerMap;
+            let keys = [];
+            let values = [] as any;
+            if (lastResult && blend_shapes) {
+
+                blend_shapes.forEach(function (value: any, key: any) {
+                    values.push(`<p><b>${key}</b> : ${value} </p> `);
+                })
+            }
+
+            blendShapesContainnr.innerHTML = values.join(' ');
+
+
+
 
             messageElement.innerHTML = fpsMessage + noFaceMessage
         })
@@ -74,7 +90,7 @@ export const createAvatar = async (customPresetIndex = null) => {
     await avatarFuture?.then(
         (createdAvatar) => {
             avatar = createdAvatar ?? undefined
-            avatar?.setBackgroundColor(Col.TRANSPARENT)
+            avatar?.setBackgroundColor(Col.GREEN)
             avatarView.avatar = avatar
 
             const spinner = document.getElementById('spinner')
