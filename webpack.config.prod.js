@@ -4,7 +4,7 @@ const common = require('./webpack.config.common.js')
 module.exports = merge(common, {
     mode: 'production',
     optimization: {
-        minimize: true,
+        minimize: false,
     },
     // devtool: 'source-map',
     performance: {

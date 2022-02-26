@@ -32,7 +32,7 @@ const messageElement = document.getElementById('message') as HTMLElement
 
 export const createAvatar = async (customPresetIndex = null) => {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
-    const blendShapesContainnr = document.getElementById('blend-shapes-values') as any;
+    // const blendShapesContainnr = document.getElementById('blend-shapes-values') as any;
 
 
     let avatarPresets: Array<AvatarMatrix> = []
@@ -57,18 +57,18 @@ export const createAvatar = async (customPresetIndex = null) => {
             const fpsMessage = `FPS: ${Math.ceil(n)}`
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
 
-            const lastResult = cameraTracker?.lastResult;
-            const blend_shapes = lastResult?._blendshapes_9?._innerMap;
+            // const lastResult = cameraTracker?.lastResult;
+            // const blend_shapes = lastResult?._blendshapes_9?._innerMap;
             let keys = [];
             let values = [] as any;
-            if (lastResult && blend_shapes) {
+            // if (lastResult && blend_shapes) {
 
-                blend_shapes.forEach(function (value: any, key: any) {
-                    values.push(`<p><b>${key}</b> : ${value} </p> `);
-                })
-            }
+            //     blend_shapes.forEach(function (value: any, key: any) {
+            //         values.push(`<p><b>${key}</b> : ${value} </p> `);
+            //     })
+            // }
 
-            blendShapesContainnr.innerHTML = values.join(' ');
+            // blendShapesContainnr.innerHTML = values.join(' ');
 
 
 

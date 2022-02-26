@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-    entry: ['./src/index.ts', './src/customVideoSource.js'],
+    entry: ['./src/index.ts'],
     // devtool: 'source-map',
     optimization: {
         minimize: true,
