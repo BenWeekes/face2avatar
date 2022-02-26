@@ -45,7 +45,8 @@ export const createAvatar = async (customPresetIndex = null) => {
 
     // Create factory for downloading and creating avatars. Do not forget to get your avatar data key at https://studio.alter.xyz
     // You might want to handle errors more gracefully in your app. We just fail with an error here, as this demo makes little sense without avatars!
-    const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas).orThrow
+    //const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas,window.location.origin).orThrow
+    const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas,"https://eu.sokool.io").orThrow
 
     // Wrap a HTML canvas with an AvatarView that handles all avatar rendering and interaction
     const avatarView = new AvatarView(canvas)
@@ -58,6 +59,7 @@ export const createAvatar = async (customPresetIndex = null) => {
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
 
             const lastResult = cameraTracker?.lastResult;
+	    /*
             const blend_shapes = lastResult?._blendshapes_9?._innerMap;
             let keys = [];
             let values = [] as any;
@@ -69,6 +71,7 @@ export const createAvatar = async (customPresetIndex = null) => {
             }
 
             blendShapesContainnr.innerHTML = values.join(' ');
+	   */
 
 
 
@@ -217,4 +220,4 @@ class CameraTracker {
     }
 }
 
-// createAvatar()
+ createAvatar();

@@ -4,10 +4,11 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-    entry: ['./src/index.ts', './src/customVideoSource.js'],
+    //entry: ['./src/index.ts', './src/customVideoSource.js'],
+    entry: ['./src/index.ts'],
     // devtool: 'source-map',
     optimization: {
-        minimize: true,
+        minimize: false,
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -54,6 +55,8 @@ module.exports = {
                     from: '*.json',
                     context: path.dirname(require.resolve('@0xalter/alter-core/package.json')),
                 },
+		 { from: 'public' },
+		 { from: 'src/customVideoSource.js' },
             ],
         }),
     ],

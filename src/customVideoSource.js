@@ -11,7 +11,7 @@
  *  @param  {string} codec - The {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/clientconfig.html#codec| client codec} used by the browser.
  */
 // import { createAvatar } from './index'
-import { createAvatar } from './index.ts';
+//import { createAvatar } from './index.ts';
 
 var client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
@@ -156,7 +156,7 @@ async function join() {
     $("#blend-shapes-values").css("display", "block");
 
 
-    await createAvatar(currentStream.split('-')[1])
+    //await createAvatar(currentStream.split('-')[1])
 
     var stream = document.getElementById("canvas").captureStream(30);
     [options.uid, localTracks.videoTrack] = await Promise.all([
