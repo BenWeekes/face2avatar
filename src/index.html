@@ -3,12 +3,11 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="style.css" />
-	 <!--script defer="defer" src="https://eu.sokool.io/bundle.js"></script-->
-
+        <!--script defer="defer" src="https://eu.sokool.io/bundle.js"></script-->
     </head>
     <body style="background-color: #dce1e3">
         <video id="videoSource" height="400" style="display: none"></video>
-        <div id="canvas-wrapper" style="position: relative;">
+        <div id="canvas-wrapper" style="position: relative">
             <canvas id="canvas" width="800" height="800"></canvas>
             <div id="message">loading...</div>
             <svg id="spinner" class="spinner" viewBox="0 0 50 50">
@@ -16,4 +15,16 @@
             </svg>
         </div>
     </body>
+
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+                setTimeout(() => {
+                    window.createAvatar()
+                }, 3000)
+            },
+            false
+        )
+    </script>
 </html>

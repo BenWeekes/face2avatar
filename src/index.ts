@@ -209,4 +209,11 @@ class CameraTracker {
 }
 
 //window. createAvatar=createAvatar;// createAvatar();
- createAvatar();
+//  createAvatar();
+declare global {
+    interface Window {
+        createAvatar: any
+    }
+}
+
+window.createAvatar = createAvatar;
