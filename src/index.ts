@@ -25,28 +25,25 @@ import {
     CameraWrapper,
 } from '@0xalter/alter-core'
 
-Logger.logLevel = LogLevel.Debug
 
-const videoElement = document.getElementById('videoSource') as HTMLVideoElement
-const messageElement = document.getElementById('message') as HTMLElement
-
-export const createAvatar = async (customPresetIndex = null) => {
+export const createAvatar = async (customPresetIndex = 4) => {
+	Logger.logLevel = LogLevel.Debug
+	const messageElement = document.getElementById('message') as HTMLElement
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
     const blendShapesContainnr = document.getElementById('blend-shapes-values') as any;
-
-
     let avatarPresets: Array<AvatarMatrix> = []
     let avatar: Avatar | undefined
     let cameraTracker: CameraTracker | undefined
     let presetsSwapExecutor: PeriodicExecutor
     let presetIndex = 0
+
     const idleAnimationAvatarController = new IdleAnimationAvatarController()
     const fps = new FPS(1.0)
 
     // Create factory for downloading and creating avatars. Do not forget to get your avatar data key at https://studio.alter.xyz
     // You might want to handle errors more gracefully in your app. We just fail with an error here, as this demo makes little sense without avatars!
     //const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas,window.location.origin).orThrow
-    const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas, "https://eu.sokool.io").orThrow
+    const avatarFactory = AvatarFactory.create(avatarDataUrlFromKey('enzdjehsjxn4vkzw7yuqfcneoiubwgn5ioqd4frhvwk4qac5n7dzg2a'), canvas,"https://eu.sokool.io").orThrow
 
     // Wrap a HTML canvas with an AvatarView that handles all avatar rendering and interaction
     const avatarView = new AvatarView(canvas)
@@ -59,19 +56,19 @@ export const createAvatar = async (customPresetIndex = null) => {
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
 
             const lastResult = cameraTracker?.lastResult;
-            /*
-                const blend_shapes = lastResult?._blendshapes_9?._innerMap;
-                let keys = [];
-                let values = [] as any;
-                if (lastResult && blend_shapes) {
-    
-                    blend_shapes.forEach(function (value: any, key: any) {
-                        values.push(`<p><b>${key}</b> : ${value} </p> `);
-                    })
-                }
-    
-                blendShapesContainnr.innerHTML = values.join(' ');
-           */
+	    /*
+            const blend_shapes = lastResult?._blendshapes_9?._innerMap;
+            let keys = [];
+            let values = [] as any;
+            if (lastResult && blend_shapes) {
+
+                blend_shapes.forEach(function (value: any, key: any) {
+                    values.push(`<p><b>${key}</b> : ${value} </p> `);
+                })
+            }
+
+            blendShapesContainnr.innerHTML = values.join(' ');
+	   */
 
 
 
@@ -112,19 +109,9 @@ export const createAvatar = async (customPresetIndex = null) => {
                 avatarPresets = presets.toArray()
                 if (avatarPresets.length > 0) {
                     if (customPresetIndex) {
-                        // presetsSwapExecutor = new PeriodicExecutor(5, () => {
-                        //     console.info(`Updating to avatar preset ${customPresetIndex}`)
-                        //     debugger;
-                        //     avatar
-                        //         ?.updateAvatarFromMatrix(avatarPresets[customPresetIndex])
-                        //         .then(() => console.log(`Updated to avatar preset ${customPresetIndex}`))
-                        // })
-                        // setTimeout(() => {
                         avatar
                             ?.updateAvatarFromMatrix(avatarPresets[customPresetIndex])
-                            .then(() => console.log(`Updated to avatar preset ${customPresetIndex}`))
-                        // }, 1000)
-
+                            .then(() => console.log(`Updated to avatar preset ${customPresetIndex} of ${avatarPresets.length}`)) 
                     } else {
                         presetsSwapExecutor = new PeriodicExecutor(20, () => {
                             const currentPresetIndex = presetIndex
@@ -180,6 +167,7 @@ class IdleAnimationAvatarController implements AvatarController {
  */
 class CameraTracker {
     static create(avatarFactory: AvatarFactory): Future<Try<CameraTracker>> {
+    const videoElement = document.getElementById('videoSource') as HTMLVideoElement
         const cameraWrapper = new CameraWrapper(videoElement)
         return FaceTracker.createVideoTracker(avatarFactory.bundledFileSystem).mapTry((tracker) => new CameraTracker(cameraWrapper, tracker))
     }
@@ -220,4 +208,5 @@ class CameraTracker {
     }
 }
 
-(<any>Window).createAvatar = createAvatar;
+//window. createAvatar=createAvatar;// createAvatar();
+ createAvatar();

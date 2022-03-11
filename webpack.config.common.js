@@ -57,6 +57,7 @@ module.exports = {
                 },
 		 { from: 'public' },
 		 { from: 'src/customVideoSource.js' },
+		 { from: 'src/agora.html' },
             ],
         }),
     ],
