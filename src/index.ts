@@ -212,8 +212,8 @@ class CameraTracker {
 //  createAvatar();
 declare global {
     interface Window {
-        createAvatar: any
+        AvatarUtils: any
     }
 }
 
-window.createAvatar = createAvatar;
+window.AvatarUtils = { createAvatar: createAvatar }

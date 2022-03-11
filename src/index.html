@@ -17,14 +17,8 @@
     </body>
 
     <script>
-        document.addEventListener(
-            'DOMContentLoaded',
-            function () {
-                setTimeout(() => {
-                    window.createAvatar()
-                }, 3000)
-            },
-            false
-        )
+        window.addEventListener('load', function () {
+            AvatarUtils.createAvatar()
+        })
     </script>
 </html>
