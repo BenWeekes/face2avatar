@@ -26,19 +26,19 @@ import {
 } from '@0xalter/alter-core'
 
 
-export const createAvatar = async (customPresetIndex = 4) => {
-	Logger.logLevel = LogLevel.Debug
-	const messageElement = document.getElementById('message') as HTMLElement
+export const createAvatar = async (customPresetIndex = 4, doBlendshapes = false) => {
+    Logger.logLevel = LogLevel.Debug
+    const messageElement = document.getElementById('message') as HTMLElement
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
-    const blendShapesContainnr = document.getElementById('blend-shapes-values') as any;
     let avatarPresets: Array<AvatarMatrix> = []
     let avatar: Avatar | undefined
-    let cameraTracker: CameraTracker | undefined
+    let cameraTracker: any | undefined
     let presetsSwapExecutor: PeriodicExecutor
     let presetIndex = 0
 
     const idleAnimationAvatarController = new IdleAnimationAvatarController()
-    const fps = new FPS(1.0)
+    //const fps = new FPS(0.1)
+    const fps = new FPS(5.1)
 
     // Create factory for downloading and creating avatars. Do not forget to get your avatar data key at https://studio.alter.xyz
     // You might want to handle errors more gracefully in your app. We just fail with an error here, as this demo makes little sense without avatars!
@@ -48,40 +48,85 @@ export const createAvatar = async (customPresetIndex = 4) => {
     // Wrap a HTML canvas with an AvatarView that handles all avatar rendering and interaction
     const avatarView = new AvatarView(canvas)
 
+    function formatb(label:string, elements:any) {
+	    var out="";
+    }
+
+    setInterval(() => {
+	     if (cameraTracker?.lastResult?.hasFace()) {
+		   var to="<table>";
+		   var d=6;
+		   if (cameraTracker?.lastResult?.faceRectangle?._elements) {
+		     var f=cameraTracker?.lastResult?.faceRectangle?._elements;
+		     to=to+"<tr><td>Face Rectangle</td><td>"+f[0].toFixed(d)+"</td><td>"+f[1].toFixed(d)+"</td><td>"+f[2].toFixed(d)+"</td><td>"+f[3].toFixed(d)+"</td></tr>";
+		   }
+
+		   if (cameraTracker?.lastResult?._positionInCrop?._elements) {
+		     var f=cameraTracker?.lastResult?._positionInCrop?._elements;
+		     to=to+"<tr><td>Position In Crop</td><td>"+f[0].toFixed(d)+"</td><td>"+f[1].toFixed(d)+"</td><td></td><td></td></tr>";
+		   }
+
+		   if (cameraTracker?.lastResult?._rotationQuaternion?._elements) {
+		     var f=cameraTracker?.lastResult?._rotationQuaternion?._elements;
+		     to=to+"<tr><td>Rotate Quatern</td><td>"+f[0].toFixed(d)+"</td><td>"+f[1].toFixed(d)+"</td><td>"+f[2].toFixed(d)+"</td><td>"+f[3].toFixed(d)+"</td></tr>";
+		   }
+
+		     to=to+"<tr><td></td><td></td><td></td><td></td><td></td></tr>";
+		   if (cameraTracker?.lastResult?._blendshapes_9?._innerMap) {
+		    var blend_shapes=cameraTracker?.lastResult?._blendshapes_9?._innerMap;
+			    var cell1:any=null;
+                            blend_shapes.forEach(function (value: any, key: any) {
+				    var cell="<td>"+key+"</td><td>"+value.toFixed(d)+"</td>";
+				    if (!cell1) {
+					    cell1=cell;
+				    } else {
+					to=to+"<tr>"+cell1+cell+"<td></td></tr>";
+					cell1=null;
+				    }
+                                })
+                    }
+
+		   to=to+"</table>";
+		   var t=document.getElementById('faceRectangle');
+                   if (t) {
+                            t.innerHTML=to;
+                   }
+
+	     }
+    },100);
     // If there is no tracking data, we will control the avatar using a simple "idle" animation
     avatarView.avatarController = idleAnimationAvatarController
     avatarView.setOnFrameListener(() => {
         fps.tick((n) => {
             const fpsMessage = `FPS: ${Math.ceil(n)}`
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
-
             const lastResult = cameraTracker?.lastResult;
-	    /*
-            const blend_shapes = lastResult?._blendshapes_9?._innerMap;
-            let keys = [];
-            let values = [] as any;
-            if (lastResult && blend_shapes) {
-
-                blend_shapes.forEach(function (value: any, key: any) {
-                    values.push(`<p><b>${key}</b> : ${value} </p> `);
-                })
-            }
-
-            blendShapesContainnr.innerHTML = values.join(' ');
-	   */
-
-
-
-
             messageElement.innerHTML = fpsMessage + noFaceMessage
+	    if (doBlendshapes && lastResult) {
+		    var blend_shapes=lastResult._blendshapes_9?._innerMap;
+	            if ( blend_shapes) {
+		            let keys = [];
+		            let values = [] as any;
+		                blend_shapes.forEach(function (value: any, key: any) {
+		                    values.push(`<p><b>${key}</b> : ${value} </p> `);
+		                })
+		    	    const bsc = document.getElementById('blend-shapes-values') as any;
+		         //   bsc.innerHTML = values.join(' ');
+	            }
+		    var t=document.getElementById('faceRectangle');
+		    if (t) {
+			    //t.innerHTML=lastResult?.faceRectangle?._elements;
+		    }
+		    t=document.getElementById('positionInCrop');
+		    if (t) {
+		    	//t.innerHTML=lastResult?._positionInCrop?._elements;
+		    }
+		    t=document.getElementById('rotationQuaternion');
+		    if (t) {
+		    	//t.innerHTML=lastResult?._rotationQuaternion?._elements;
+		    }
+	    }
         })
-        // canvas.width = 480;
-        // canvas.height = 360;
-        //
-        // if (canvas.clientWidth !== canvas.width || canvas.clientHeight !== canvas.height) {
-        //     canvas.width = canvas.clientWidth
-        //     canvas.height = canvas.clientHeight
-        // }
     })
 
     // Create first avatar. Note that loading avatars can take some time (network requests etc.) so we get an asynchronous Future object

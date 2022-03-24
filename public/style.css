@@ -3,8 +3,6 @@ body {
 }
 canvas {
     display: block; /* prevents scrollbar */
-    width: 100vw;
-    height: 100vh;
 }
 
 #message {
