@@ -151,13 +151,8 @@ async function join() {
     $("#local-player-name").text(`localVideo(${options.uid})`);
     console.log("publish success");
   }
-  else if (currentStream.includes("altar")) {
-    console.log("chaned to altar");
-    $("#blend-shapes-values").css("display", "block");
-
-
-    //await createAvatar(currentStream.split('-')[1])
-
+  else if (currentStream.includes("avatar-")) {
+    AvatarUtils.switchAvatar(currentStream.split('-')[1]);
     var stream = document.getElementById("canvas").captureStream(30);
     [options.uid, localTracks.videoTrack] = await Promise.all([
       // Join the channel.

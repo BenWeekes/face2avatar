@@ -2,7 +2,7 @@ body {
     margin: 0;
 }
 canvas {
-    display: block; /* prevents scrollbar */
+    idisplay: block; /* prevents scrollbar */
 }
 
 #message {

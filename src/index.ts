@@ -26,12 +26,20 @@ import {
 } from '@0xalter/alter-core'
 
 
+    //let bwavatar: Avatar | undefined;
+    //let bwavatarPresets: Array<AvatarMatrix> = [];
+
+    let avatarPresets: Array<AvatarMatrix> = []
+    let avatar: Avatar | undefined
+
+export const switchAvatar = async (customPresetIndex = 1) => {
+     avatar?.updateAvatarFromMatrix(avatarPresets[customPresetIndex])
+}
+
 export const createAvatar = async (customPresetIndex = 4, doBlendshapes = false) => {
     Logger.logLevel = LogLevel.Debug
     const messageElement = document.getElementById('message') as HTMLElement
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
-    let avatarPresets: Array<AvatarMatrix> = []
-    let avatar: Avatar | undefined
     let cameraTracker: any | undefined
     let presetsSwapExecutor: PeriodicExecutor
     let presetIndex = 0
@@ -137,6 +145,7 @@ export const createAvatar = async (customPresetIndex = 4, doBlendshapes = false)
             avatar = createdAvatar ?? undefined
             avatar?.setBackgroundColor(Col.GREEN)
             avatarView.avatar = avatar
+	    window.AvatarUtils.bwavatar=avatar;
 
             const spinner = document.getElementById('spinner')
             if (spinner) {
@@ -170,6 +179,7 @@ export const createAvatar = async (customPresetIndex = 4, doBlendshapes = false)
                     }
 
                 }
+		window.AvatarUtils.bwavatarPresets=avatarPresets;
             },
             (error) => console.error(`Failed to load and parse avatar presets, ${error}`)
         )
@@ -261,4 +271,4 @@ declare global {
     }
 }
 
-window.AvatarUtils = { createAvatar: createAvatar }
+window.AvatarUtils = { createAvatar: createAvatar, switchAvatar: switchAvatar}
