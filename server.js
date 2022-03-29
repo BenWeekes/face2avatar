@@ -2,11 +2,15 @@ const http = require("http");                 // http server core module
 const https = require('https');
 const fs = require('fs');
 const path = require("path");
+const cors = require('cors');
 const express = require("express");           // web framework external module
 const portHTTPS =  443
 
 const app = express();
+app.use(cors());
+
 var DIST_DIR = path.join(__dirname, "dist");
+
 app.use(express.static(DIST_DIR));
 
 const httpsServer = require("https").createServer({

@@ -109,7 +109,9 @@ export const createAvatar = async (customPresetIndex = 4, doBlendshapes = false)
             const fpsMessage = `FPS: ${Math.ceil(n)}`
             const noFaceMessage = cameraTracker?.lastResult?.hasFace() !== true ? '<br /><span class="cameraDetection">No face detected</span>' : ''
             const lastResult = cameraTracker?.lastResult;
-            messageElement.innerHTML = fpsMessage + noFaceMessage
+	    if (messageElement) {
+            	messageElement.innerHTML = fpsMessage + noFaceMessage
+	    }
 	    if (doBlendshapes && lastResult) {
 		    var blend_shapes=lastResult._blendshapes_9?._innerMap;
 	            if ( blend_shapes) {
