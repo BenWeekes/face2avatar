@@ -58,6 +58,7 @@ module.exports = {
 		 { from: 'public' },
 		 { from: 'src/customVideoSource.js' },
 		 { from: 'src/agora.html' },
+		 { from: 'src/capture.html' },
 		 { from: 'src/blendshapes.html' },
             ],
         }),
