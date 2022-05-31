@@ -8,13 +8,22 @@
     </head>
 
     <body style="background-color: #dce1e3">
+	      <video id="videoSource" height="360" style="display: none"></video>
+
         <div id="canvas-wrapper" style="position: relative">
             <canvas id="canvas" width="640" height="360"></canvas>
+	    <div id="message">loading...</div>
+            <svg id="spinner" class="spinner" viewBox="0 0 50 50">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
         </div>
         <video id="vidout" autoplay style="width:320px; height:180px; background-color: yellow;"></video>
-        <video id="local-player" autoplay style="width:320px; height:180px; background-color: red;"></video>
+	<div id="local-player" style="display:inline-block; width:320px; height:180px; background-color: red;"></div><br/>
 	<button onclick="capture()">capture</button>
 	<button onclick="agora()">agora</button>
+	<button onclick="agora2()">agora2</button>
+	<button onclick="capture3()">capture3</button>
+	<button onclick="agora3()">agora3</button>
     </body>
 
     <script>
@@ -29,23 +38,53 @@
 		video.play();
 	}
 
+        function capture3() {
+		 var stream = document.getElementById("canvas").captureStream(30);
+		window.myStream = stream;
+		 var video = document.getElementById("vidout");
+		video.srcObject = stream;
+		video.play();
+	}
+
         var appid="20b7c51ff4c644ab80cf5a4e646b0537";
         var room="avatar";
         var agoraClient=AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
+	async function agora3() {
+           await agoraClient.join(appid, room, null, null);
+           var audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+           var stream = window.myStream;
+           var videoTrack = await AgoraRTC.createCustomVideoTrack({ mediaStreamTrack: stream.getVideoTracks()[0] })
+           await agoraClient.publish([audioTrack,videoTrack]);
+           videoTrack.play("local-player");
+        }
+
         async function agora() {
            await agoraClient.join(appid, room, null, null);
            var audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-	   var stream = document.getElementById("vidout").captureStream();
+           var stream = document.getElementById("vidout").captureStream();
 
-	   const videoTracks = stream.getVideoTracks();
-	   const videoStream = new MediaStream();
-	   videoTracks.forEach(track => videoStream.addTrack(track));
+           const videoTracks = stream.getVideoTracks();
+           const videoStream = new MediaStream();
+           videoTracks.forEach(track => videoStream.addTrack(track));
 
-	   var vl=videoStream.getVideoTracks().length;
-	   var videoTrack = await AgoraRTC.createCustomVideoTrack({ mediaStreamTrack: videoStream.getVideoTracks()[0] })
+           var vl=videoStream.getVideoTracks().length;
+           var videoTrack = await AgoraRTC.createCustomVideoTrack({ mediaStreamTrack: videoStream.getVideoTracks()[0] })
            await agoraClient.publish([audioTrack,videoTrack]);
-    	   videoTrack.play("local-player");
+           videoTrack.play("local-player");
         }
+
+
+        async function agora2() {
+	   await agoraClient.join(appid, room, null, null);
+           var audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+           var stream = document.getElementById("vidout").srcObject;
+           const videoTracks = stream.getVideoTracks();
+           videoTrack = videoTracks[0].clone();
+           var videoTrack = await AgoraRTC.createCustomVideoTrack({ mediaStreamTrack:videoTrack })
+           await agoraClient.publish([audioTrack,videoTrack]);
+           videoTrack.play("local-player");
+	}
+        
     </script>
 </html>
