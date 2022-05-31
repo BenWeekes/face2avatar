@@ -154,6 +154,7 @@ async function join() {
   else if (currentStream.includes("avatar-")) {
     AvatarUtils.switchAvatar(currentStream.split('-')[1]);
     var stream = document.getElementById("canvas").captureStream(30);
+	  
     [options.uid, localTracks.videoTrack] = await Promise.all([
       // Join the channel.
       client.join(options.appid, options.channel, options.token || null, options.uid || null),
